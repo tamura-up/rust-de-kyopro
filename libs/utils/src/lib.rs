@@ -21,13 +21,6 @@ macro_rules! echo { ($($num:expr),*)=> {
 }
 
 #[macro_export]
-macro_rules! mint {
-    ($num:expr) => {
-        Mint::new($num)
-    };
-}
-
-#[macro_export]
 macro_rules! YesNo {
     ($num:expr) => {
         if ($num) as i64 == 0 {

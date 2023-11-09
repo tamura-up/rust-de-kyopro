@@ -41,7 +41,7 @@ fi
 # bundle 実行
 cp ${source_file} ${bundle_dir}/src/bin/a.rs
 pushd ${bundle_dir}
-cargo equip $exclude_atcoder_crates --resolve-cfgs --remove docs comments --minify libs  --no-rustfmt --no-check  --bin problem-a | xsel --clipboard --input
+cargo equip $exclude_atcoder_crates --resolve-cfgs --remove docs comments --minify libs  --no-rustfmt --no-check  --bin a | xsel --clipboard --input
 
 echo ""
 echo '""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""'

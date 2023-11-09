@@ -1,6 +1,16 @@
 #![allow(non_snake_case)]
 //! modint 関連のライブラリ
 
+#[macro_export]
+macro_rules! mint {
+    ($num:expr) => {
+        Mint::new($num)
+    };
+    () => {
+        Mint::new(0)
+    };
+}
+
 /// modint の Comb 構造体を定義するマクロ。
 /// ac_library の ModInt を Mint として use しているモジュール内で実行してください。
 /// 
