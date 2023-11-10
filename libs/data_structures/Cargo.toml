@@ -1,5 +1,5 @@
 [package]
-name = "kyopro-multiset"
+name = "kyopro-data-stractures"
 version = "0.1.0"
 edition = "2021"
 license = "CC0-1.0"
@@ -9,4 +9,4 @@ license = "CC0-1.0"
 [dependencies]
 
 [lib]
-name = "kyopro_multiset"
+name = "kyopro_data_stractures"

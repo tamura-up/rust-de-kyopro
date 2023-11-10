@@ -16,7 +16,7 @@ where
     /// # Examples
     ///
     /// ```
-    /// use kyoupuro_multiset::Multiset;
+    /// use kyopro_data_stractures::multiset::Multiset;
     /// 
     /// let mut st = Multiset::new();
     /// st.insert(1);
