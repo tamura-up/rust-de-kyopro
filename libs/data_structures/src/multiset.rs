@@ -3,6 +3,8 @@
 //!
 use std::collections::BTreeMap;
 
+use crate::btree_neighbors::MapNeighbors;
+
 #[derive(Clone, Debug)]
 pub struct Multiset<T> {
     size: usize,
@@ -83,10 +85,7 @@ where
     }
     /// val 以上の最小の値を返します
     pub fn find_first(&self, val: &T) -> Option<T> {
-        let mut iter = self
-            .map
-            .range((std::ops::Bound::Included(val), std::ops::Bound::Unbounded));
-        if let Some((k, _)) = iter.next() {
+        if let Some((k, _)) = self.map.find_first(val) {
             Some(*k)
         } else {
             None
@@ -95,10 +94,7 @@ where
 
     /// val 以下の最大の値を返します
     pub fn find_last(&self, val: &T) -> Option<T> {
-        let mut iter = self
-            .map
-            .range((std::ops::Bound::Unbounded, std::ops::Bound::Included(val)));
-        if let Some((k, _)) = iter.next() {
+        if let Some((k, _)) = self.map.find_last(val) {
             Some(*k)
         } else {
             None
