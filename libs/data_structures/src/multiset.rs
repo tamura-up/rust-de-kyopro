@@ -17,7 +17,7 @@ where
     ///
     /// ```
     /// use kyopro_data_stractures::multiset::Multiset;
-    /// 
+    ///
     /// let mut st = Multiset::new();
     /// st.insert(1);
     /// st.insert(1);
@@ -81,6 +81,30 @@ where
         }
         return res;
     }
+    /// val 以上の最小の値を返します
+    pub fn find_first(&self, val: &T) -> Option<T> {
+        let mut iter = self
+            .map
+            .range((std::ops::Bound::Included(val), std::ops::Bound::Unbounded));
+        if let Some((k, _)) = iter.next() {
+            Some(*k)
+        } else {
+            None
+        }
+    }
+
+    /// val 以下の最大の値を返します
+    pub fn find_last(&self, val: &T) -> Option<T> {
+        let mut iter = self
+            .map
+            .range((std::ops::Bound::Unbounded, std::ops::Bound::Included(val)));
+        if let Some((k, _)) = iter.next() {
+            Some(*k)
+        } else {
+            None
+        }
+    }
+
     pub fn len(&self) -> usize {
         self.size
     }
@@ -136,5 +160,21 @@ mod tests {
         st.insert(2);
         st.insert(2);
         assert_eq!(st.to_vec(), vec![1, 2, 2]);
+    }
+    #[test]
+    fn test_find_first_last() {
+        let mut st = Multiset::new();
+        st.insert(2usize);
+        st.insert(2usize);
+        st.insert(2usize);
+        st.insert(4usize);
+        st.insert(4usize);
+        assert_eq!(st.find_first(&3), Some(4));
+        assert_eq!(st.find_first(&4), Some(4));
+        assert_eq!(st.find_first(&5), None);
+
+        assert_eq!(st.find_last(&3), Some(2));
+        assert_eq!(st.find_last(&2), Some(2));
+        assert_eq!(st.find_last(&1), None);
     }
 }
