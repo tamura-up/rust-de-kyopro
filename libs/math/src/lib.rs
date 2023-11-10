@@ -65,6 +65,7 @@ macro_rules! impl_integer_for_isize {
 impl_integer_for_isize!(i8, test_integer_i8);
 impl_integer_for_isize!(i32, test_integer_i32);
 impl_integer_for_isize!(i64, test_integer_i64);
+impl_integer_for_isize!(isize, test_integer_isize);
 
 // usize 型に Integer trait を実装する
 macro_rules! impl_integer_for_usize {
@@ -101,3 +102,4 @@ macro_rules! impl_integer_for_usize {
 impl_integer_for_usize!(u8, test_integer_u8);
 impl_integer_for_usize!(u32, test_integer_u32);
 impl_integer_for_usize!(u64, test_integer_u64);
+impl_integer_for_usize!(usize, test_integer_usize);
