@@ -8,7 +8,7 @@ lazy segment tree の実装例
 ## (TODO) まだ理解できていないこと
 
 + $`id\circ f = f`$ となるべき？
-    + `mapping`で $`f(id(x))`$ と演算することと等価という認識
+    + $`(id\circ f)(x)`$ は、`mapping`で $`f(id(x))`$ と演算することと等価という認識
 + `composition` で `id` を返すとそこで遅延評価の伝搬が止まるという認識をしているが合っているか？
 
 ## examples
