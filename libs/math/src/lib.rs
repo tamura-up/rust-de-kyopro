@@ -1,6 +1,7 @@
 //! 算数系の処理をまとめています
+pub mod prime;
 
-// num-integer の実装を参考にしています
+// 以下 num-integer の実装を参考にしています
 // ## 参考サイト
 // - https://docs.rs/num-integer/latest/num_integer/
 // - https://kagcc.hatenablog.com/entry/2019/12/12/221811
@@ -103,3 +104,4 @@ impl_integer_for_usize!(u8, test_integer_u8);
 impl_integer_for_usize!(u32, test_integer_u32);
 impl_integer_for_usize!(u64, test_integer_u64);
 impl_integer_for_usize!(usize, test_integer_usize);
+
