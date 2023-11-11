@@ -1,5 +1,6 @@
 use std::ops::{Index, IndexMut};
 
+/// down, right, up, left
 pub const D4: [P; 4] = [P(1, 0), P(0, 1), P(!0, 0), P(0, !0)];
 
 /// 座標を表す構造体
@@ -74,11 +75,7 @@ impl<T> Grid<T> {
     }
 
     /// b から 各 offset 分移動した座標 の Iterator<P> を返します
-    pub fn positions_from<'a>(
-        &'a self,
-        b: P,
-        offsets: &'a [P],
-    ) -> impl Iterator<Item = P> + 'a {
+    pub fn positions_from<'a>(&'a self, b: P, offsets: &'a [P]) -> impl Iterator<Item = P> + 'a {
         let x = offsets
             .iter()
             .map(move |&d| P(b.0.wrapping_add(d.0), b.1.wrapping_add(d.1)));
@@ -133,37 +130,42 @@ impl<T> IndexMut<P> for Grid<T> {
     }
 }
 
-#[test]
-fn test_position_from() {
-    let g = Grid::new(3, 3, 0);
-    for d in D4 {
-        assert_eq!(g.position_from(P(1, 1), d), Some(P(1, 1).add(&d)));
-    }
-    assert_eq!(g.position_from(P(1, 0), P(0, !0)), None);
-}
+#[cfg(test)]
+mod test_mod {
+    use super::{Grid,D4,P};
 
-#[test]
-fn test_positions_from() {
-    let g = Grid::new(2, 2, 0);
-    let offsets = vec![P(1, 0), P(0, 1), P(!0, 0), P(0, !0)];
-    let ps: Vec<P> = g.positions_from(P(0, 1), &offsets).collect();
-    let expected = vec![P(0, 0), P(1, 1)];
-    assert_eq!(ps.len(), expected.len());
-    assert!(expected.into_iter().all(|p| ps.iter().any(|&x| x == p)));
-}
-#[test]
-fn test_adj4() {
-    let g = Grid::new(3, 3, 0);
-    {
-        let ps = g.adj4(P(0, 0)).collect::<Vec<P>>();
-        let expected = vec![P(1, 0), P(0, 1)];
+    #[test]
+    fn test_position_from() {
+        let g = Grid::new(3, 3, 0);
+        for d in D4 {
+            assert_eq!(g.position_from(P(1, 1), d), Some(P(1, 1).add(&d)));
+        }
+        assert_eq!(g.position_from(P(1, 0), P(0, !0)), None);
+    }
+
+    #[test]
+    fn test_positions_from() {
+        let g = Grid::new(2, 2, 0);
+        let offsets = vec![P(1, 0), P(0, 1), P(!0, 0), P(0, !0)];
+        let ps: Vec<P> = g.positions_from(P(0, 1), &offsets).collect();
+        let expected = vec![P(0, 0), P(1, 1)];
         assert_eq!(ps.len(), expected.len());
         assert!(expected.into_iter().all(|p| ps.iter().any(|&x| x == p)));
     }
-    {
-        let ps = g.adj4(P(1, 1)).collect::<Vec<P>>();
-        let expected = vec![P(1, 0), P(0, 1),P(2,1),P(1,2)];
-        assert_eq!(ps.len(), expected.len());
-        assert!(expected.into_iter().all(|p| ps.iter().any(|&x| x == p)));
+    #[test]
+    fn test_adj4() {
+        let g = Grid::new(3, 3, 0);
+        {
+            let ps = g.adj4(P(0, 0)).collect::<Vec<P>>();
+            let expected = vec![P(1, 0), P(0, 1)];
+            assert_eq!(ps.len(), expected.len());
+            assert!(expected.into_iter().all(|p| ps.iter().any(|&x| x == p)));
+        }
+        {
+            let ps = g.adj4(P(1, 1)).collect::<Vec<P>>();
+            let expected = vec![P(1, 0), P(0, 1), P(2, 1), P(1, 2)];
+            assert_eq!(ps.len(), expected.len());
+            assert!(expected.into_iter().all(|p| ps.iter().any(|&x| x == p)));
+        }
     }
 }

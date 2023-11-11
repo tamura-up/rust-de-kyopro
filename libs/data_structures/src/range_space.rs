@@ -135,73 +135,78 @@ where
     }
 }
 
-#[test]
-fn test_add_space() {
-    let mut rs = RangeSpace::new(10000i32);
-    let _ = rs.add_range(1, 3);
-    assert!(rs.st.contains(&(3, 1)));
-    assert_eq!(rs.st.len(), 1);
+#[cfg(test)]
+mod tests {
+    use super::RangeSpace;
 
-    // 右側隣接区間に追加。マージされる
-    let _ = rs.add_range(3, 5);
-    assert!(rs.st.contains(&(5, 1)));
-    assert_eq!(rs.st.len(), 1);
+    #[test]
+    fn test_add_space() {
+        let mut rs = RangeSpace::new(10000i32);
+        let _ = rs.add_range(1, 3);
+        assert!(rs.st.contains(&(3, 1)));
+        assert_eq!(rs.st.len(), 1);
 
-    let _ = rs.add_range(8, 10);
-    assert!(rs.st.contains(&(10, 8)));
-    assert_eq!(rs.st.len(), 2);
+        // 右側隣接区間に追加。マージされる
+        let _ = rs.add_range(3, 5);
+        assert!(rs.st.contains(&(5, 1)));
+        assert_eq!(rs.st.len(), 1);
 
-    // 左側隣接区間に追加。マージされる
-    let _ = rs.add_range(6, 8);
-    assert!(rs.st.contains(&(5, 1)));
-    assert!(rs.st.contains(&(10, 6)));
-    assert_eq!(rs.st.len(), 2);
+        let _ = rs.add_range(8, 10);
+        assert!(rs.st.contains(&(10, 8)));
+        assert_eq!(rs.st.len(), 2);
 
-    // 中央空き区間に追加。全体がマージされる
-    let _ = rs.add_range(5, 6);
-    assert!(rs.st.contains(&(10, 1)));
-    assert_eq!(rs.st.len(), 1);
-}
-#[test]
-fn test_add_space_err() {
-    let mut rs = RangeSpace::new(10000i32);
-    let _ = rs.add_range(10, 20);
-    assert!(rs.add_range(10, 11).is_err());
-    assert!(rs.add_range(19, 20).is_err());
+        // 左側隣接区間に追加。マージされる
+        let _ = rs.add_range(6, 8);
+        assert!(rs.st.contains(&(5, 1)));
+        assert!(rs.st.contains(&(10, 6)));
+        assert_eq!(rs.st.len(), 2);
 
-    assert!(rs.add_range(9, 10).is_ok());
-    assert!(rs.add_range(20, 21).is_ok());
-}
+        // 中央空き区間に追加。全体がマージされる
+        let _ = rs.add_range(5, 6);
+        assert!(rs.st.contains(&(10, 1)));
+        assert_eq!(rs.st.len(), 1);
+    }
+    #[test]
+    fn test_add_space_err() {
+        let mut rs = RangeSpace::new(10000i32);
+        let _ = rs.add_range(10, 20);
+        assert!(rs.add_range(10, 11).is_err());
+        assert!(rs.add_range(19, 20).is_err());
 
-#[test]
-fn test_use_range() {
-    let mut rs = RangeSpace::new(10000i32);
-    let _ = rs.add_range(1, 10);
-    assert!(rs.use_range(1, 2).is_ok());
-    assert!(rs.st.contains(&(10, 2)));
-    assert_eq!(rs.st.len(), 1);
+        assert!(rs.add_range(9, 10).is_ok());
+        assert!(rs.add_range(20, 21).is_ok());
+    }
 
-    assert!(rs.use_range(3, 5).is_ok());
-    assert!(rs.st.contains(&(10, 5)));
-    assert!(rs.st.contains(&(3, 2)));
-    assert_eq!(rs.st.len(), 2);
+    #[test]
+    fn test_use_range() {
+        let mut rs = RangeSpace::new(10000i32);
+        let _ = rs.add_range(1, 10);
+        assert!(rs.use_range(1, 2).is_ok());
+        assert!(rs.st.contains(&(10, 2)));
+        assert_eq!(rs.st.len(), 1);
 
-    assert!(rs.use_range(9, 10).is_ok());
-    assert!(rs.st.contains(&(9, 5)));
-    assert!(rs.st.contains(&(3, 2)));
-    assert_eq!(rs.st.len(), 2);
+        assert!(rs.use_range(3, 5).is_ok());
+        assert!(rs.st.contains(&(10, 5)));
+        assert!(rs.st.contains(&(3, 2)));
+        assert_eq!(rs.st.len(), 2);
 
-    // 使用済み区間を指定した場合は err
-    assert!(rs.use_range(1, 2).is_err());
-}
-#[test]
-fn test_first_point() {
-    let mut rs = RangeSpace::new(10000i32);
-    let _ = rs.add_range(3, 5);
-    let _ = rs.add_range(8, 15);
-    assert_eq!(rs.find_first_point(2), Some(3));
-    assert_eq!(rs.find_first_point(3), Some(3));
-    assert_eq!(rs.find_first_point(5), Some(8));
-    assert_eq!(rs.find_first_point(10), Some(10));
-    assert_eq!(rs.find_first_point(15), None);
+        assert!(rs.use_range(9, 10).is_ok());
+        assert!(rs.st.contains(&(9, 5)));
+        assert!(rs.st.contains(&(3, 2)));
+        assert_eq!(rs.st.len(), 2);
+
+        // 使用済み区間を指定した場合は err
+        assert!(rs.use_range(1, 2).is_err());
+    }
+    #[test]
+    fn test_first_point() {
+        let mut rs = RangeSpace::new(10000i32);
+        let _ = rs.add_range(3, 5);
+        let _ = rs.add_range(8, 15);
+        assert_eq!(rs.find_first_point(2), Some(3));
+        assert_eq!(rs.find_first_point(3), Some(3));
+        assert_eq!(rs.find_first_point(5), Some(8));
+        assert_eq!(rs.find_first_point(10), Some(10));
+        assert_eq!(rs.find_first_point(15), None);
+    }
 }
