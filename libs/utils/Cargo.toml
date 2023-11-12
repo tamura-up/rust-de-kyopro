@@ -9,4 +9,4 @@ license = "CC0-1.0"
 [dependencies]
 
 [lib]
-name = "kyopro_uitls"
+name = "kyopro_utils"
