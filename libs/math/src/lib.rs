@@ -9,8 +9,7 @@ pub mod prime;
 use std::ops::{Add, Div, Mul, Rem, Sub};
 
 pub trait Integer<Rhs = Self, Output = Self>:
-    Sized
-    + Copy
+    Copy
     + Add<Rhs, Output = Output>
     + Sub<Rhs, Output = Output>
     + Div<Rhs, Output = Output>
@@ -104,4 +103,3 @@ impl_integer_for_usize!(u8, test_integer_u8);
 impl_integer_for_usize!(u32, test_integer_u32);
 impl_integer_for_usize!(u64, test_integer_u64);
 impl_integer_for_usize!(usize, test_integer_usize);
-

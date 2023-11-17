@@ -1,3 +1,5 @@
+use std::ops::{Add, Rem};
+
 /// 多次元の vector を作成します
 ///
 /// Examples
@@ -73,4 +75,9 @@ where
         print!("{}{}", v[i], if i + 1 == v.len() { "" } else { " " });
     }
     println!();
+}
+
+/// 正の剰余を求める
+pub fn pmod<T: Copy + Add<Output = T> + Rem<Output = T>>(x: T, m: T) -> T {
+    ((x % m) + m) % m
 }
