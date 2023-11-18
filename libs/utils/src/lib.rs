@@ -3,8 +3,8 @@ use std::ops::{Add, Rem};
 /// 多次元の vector を作成します
 ///
 /// Examples
-/// ```
-/// N*N の vector
+///  ```ignore
+/// # N*N の vector
 /// let mut result = mat![0; N; N];
 /// ```
 #[macro_export]
@@ -80,4 +80,71 @@ where
 /// 正の剰余を求める
 pub fn pmod<T: Copy + Add<Output = T> + Rem<Output = T>>(x: T, m: T) -> T {
     ((x % m) + m) % m
+}
+
+/// lower_bound like c++
+pub fn lower_bound<T>(a: &[T], x: &T) -> usize
+where
+    T: Ord,
+{
+    if a.len() == 0 || a[0] >= *x {
+        return 0;
+    }
+    let mut l = 0;
+    let mut r = a.len();
+    while l + 1 < r {
+        let m = (l + r) / 2;
+        if a[m] < *x {
+            l = m;
+        } else {
+            r = m;
+        }
+    }
+    r
+}
+
+/// upper_bound like c++
+pub fn upper_bound<T>(a: &[T], x: &T) -> usize
+where
+    T: Ord,
+{
+    if a.len() == 0 || a[0] > *x {
+        return 0;
+    }
+    let mut l = 0;
+    let mut r = a.len();
+    while l + 1 < r {
+        let m = (l + r) / 2;
+        if a[m] <= *x {
+            l = m;
+        } else {
+            r = m;
+        }
+    }
+    r
+}
+
+#[cfg(test)]
+mod bound_test {
+    use super::{lower_bound, upper_bound};
+
+    #[test]
+    fn test_lb() {
+        let a = [1, 2, 4, 8];
+        assert_eq!(lower_bound(&a, &0), 0);
+        assert_eq!(lower_bound(&a, &1), 0);
+        assert_eq!(lower_bound(&a, &2), 1);
+        assert_eq!(lower_bound(&a, &3), 2);
+        assert_eq!(lower_bound(&a, &8), 3);
+        assert_eq!(lower_bound(&a, &9), 4);
+    }
+    #[test]
+    fn test_ub() {
+        let a = [1, 2, 4, 8];
+        assert_eq!(upper_bound(&a, &0), 0);
+        assert_eq!(upper_bound(&a, &1), 1);
+        assert_eq!(upper_bound(&a, &3), 2);
+        assert_eq!(upper_bound(&a, &7), 3);
+        assert_eq!(upper_bound(&a, &8), 4);
+    }
 }
