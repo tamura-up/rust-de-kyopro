@@ -28,6 +28,16 @@ pub fn lcm<T: Integer>(x: T, y: T) -> T {
     (x / g) * (y / g) * g
 }
 
+/// sqrt(x) 以下の最大の整数を求める
+pub fn sqrti(x: usize) -> usize {
+    let mut v = ((x + 1) as f64).sqrt() as usize;
+    while v * v > x {
+        v -= 1;
+    }
+    return v;
+}
+
+
 // isize 型に Integer trait を実装する
 macro_rules! impl_integer_for_isize {
     ($T:ty,$test_mod:ident) => {

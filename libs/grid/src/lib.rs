@@ -15,6 +15,12 @@ impl P {
     pub fn add(self, rhs: &P) -> P {
         P(self.0.wrapping_add(rhs.0), self.1.wrapping_add(rhs.1))
     }
+    /// マンハッタン距離を求める
+    pub fn dist(&self, rhp: &P) -> usize {
+        let a = (self.0 as i32 - rhp.0 as i32).abs() as usize;
+        let b = (self.1 as i32 - rhp.1 as i32).abs() as usize;
+        a + b
+    }
 }
 
 impl<T> Index<P> for Vec<Vec<T>> {
@@ -40,11 +46,7 @@ where
     T: Copy,
 {
     pub fn from(g: &Vec<Vec<T>>) -> Self {
-        Grid {
-            h: g.len(),
-            w: g[0].len(),
-            g: g.clone(),
-        }
+        Grid { h: g.len(), w: g[0].len(), g: g.clone() }
     }
     /// # Arguments
     ///
@@ -69,16 +71,12 @@ impl<T> Grid<T> {
     ///  }
     ///  ```
     pub fn adj4<'a>(&'a self, p: P) -> impl Iterator<Item = P> + 'a {
-        D4.iter()
-            .map(move |&d| p.add(&P(d.0, d.1)))
-            .filter(|&p| p.0 < self.h && p.1 < self.w)
+        D4.iter().map(move |&d| p.add(&P(d.0, d.1))).filter(|&p| p.0 < self.h && p.1 < self.w)
     }
 
     /// b から 各 offset 分移動した座標 の Iterator<P> を返します
     pub fn positions_from<'a>(&'a self, b: P, offsets: &'a [P]) -> impl Iterator<Item = P> + 'a {
-        let x = offsets
-            .iter()
-            .map(move |&d| P(b.0.wrapping_add(d.0), b.1.wrapping_add(d.1)));
+        let x = offsets.iter().map(move |&d| P(b.0.wrapping_add(d.0), b.1.wrapping_add(d.1)));
         x.filter(|&p| p.0 < self.h && p.1 < self.w)
     }
 
@@ -132,7 +130,7 @@ impl<T> IndexMut<P> for Grid<T> {
 
 #[cfg(test)]
 mod test_mod {
-    use super::{Grid,D4,P};
+    use super::{Grid, D4, P};
 
     #[test]
     fn test_position_from() {
