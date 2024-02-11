@@ -37,6 +37,30 @@ pub fn sqrti(x: usize) -> usize {
     return v;
 }
 
+fn _ext_gcd(a: i64, b: i64, p: &mut i64, q: &mut i64) -> i64 {
+    if b == 0 {
+        *p = 1;
+        *q = 0;
+        return a;
+    }
+    let d = _ext_gcd(b, a % b, q, p);
+    *q -= a / b * *p;
+    d
+}
+/// 拡張 Euclid の互除法
+/// ap + bq = gcd(a, b) となる (p, q) と、gcd(a, b) をリターンします
+/// ```
+/// use kyopro_math::ext_gcd;
+/// assert_eq!(ext_gcd(3, 5), (2, -1, 1)); // 3*2+5*(-1)=1 = gcd(3,5)
+/// assert_eq!(ext_gcd(8, 12), (-1, 1, 4)); // 8*(-1)+12*(1)=4 = gcd(3,5)
+/// assert_eq!(ext_gcd(2394, 714), (3, -10, 42));
+/// ```
+pub fn ext_gcd(a: i64, b: i64) -> (i64, i64, i64) {
+    let mut p = 0;
+    let mut q = 0;
+    let g = _ext_gcd(a, b, &mut p, &mut q);
+    return (p, q, g);
+}
 
 // isize 型に Integer trait を実装する
 macro_rules! impl_integer_for_isize {
