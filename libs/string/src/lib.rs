@@ -1,3 +1,19 @@
+pub fn runlength_encoding<T: Eq + Copy>(s: &[T]) -> Vec<(T, usize)> {
+    let mut pi = 0;
+    let mut cnt = 0usize;
+    let mut res = vec![];
+    for (i, c) in s.iter().enumerate() {
+        if s[pi] != *c {
+            res.push((s[pi], cnt));
+            cnt = 0;
+            pi = i;
+        }
+        cnt += 1;
+    }
+    res.push((s[pi], cnt));
+    res
+}
+
 #[allow(non_snake_case)]
 /// rolling hash
 /// 以下記事の実装
@@ -78,7 +94,7 @@ pub mod rolling_hash {
 
     /// a は b に含まれているか? を返します。
     /// O(|a|+|b|)
-    pub fn contains( a: &[u64], b: &[u64]) -> bool {
+    pub fn contains(a: &[u64], b: &[u64]) -> bool {
         let al = a.len();
         let bl = b.len();
         if al > bl {
