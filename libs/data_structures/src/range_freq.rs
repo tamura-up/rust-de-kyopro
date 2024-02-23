@@ -53,7 +53,6 @@ impl<T: Copy + Ord> RangeFreq<T> {
         if b <= l || r <= a {
             return 0;
         }
-        eprintln!("lr:{} {} ({})", l, r, k);
         if a <= l && r <= b {
             return lower_bound(&self.dat[k], &x);
         }
