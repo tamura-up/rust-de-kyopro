@@ -59,3 +59,30 @@ fn segtree_exsample() {
     }
 }
 ```
+
+## max_right, min_left の使い方メモ
+
+```rs
+use ac_library::{Additive, Segtree};
+
+fn main() {
+    // https://github.com/rust-lang-ja/ac-library-rs/blob/master/src/segtree.rs
+    let a = vec![0, 1, 1, 0, 1, 1];
+    let seg: Segtree<Additive<i64>> = Segtree::from(a.clone());
+
+    // max_right
+    // > fが単調だとすれば、f(op(a[l], a[l + 1], ..., a[r - 1])) = true となる最大の r、と解釈することが可能です。
+    // 条件を満たす最大の半開区間 [l, r) があり、l を指定したら r を返してくれるイメージ
+    // f には、半開区間 [l, r) で条件をみたす関数を渡す
+    assert_eq!(seg.max_right(1, |&x| x <= 1), 2);
+    assert_eq!(seg.max_right(1, |&x| x <= 2), 4);
+
+    // min_left
+    // > fが単調だとすれば、f(op(a[l], a[l + 1], ..., a[r - 1])) = true となる最小の l、と解釈することが可能です。
+    // 上の説明において `r` が区間に含まれていないことに注意。
+    // 条件を満たす最大の半開区間 [l, r) があり、r を指定したら l を返してくれるイメージ
+    // f には、半開区間 [l, r) で条件をみたす関数を渡す。
+    assert_eq!(seg.min_left(2, |&x| x <= 1), 0);
+    assert_eq!(seg.min_left(3, |&x| x <= 1), 2);
+}
+```
