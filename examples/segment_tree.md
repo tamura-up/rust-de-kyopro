@@ -86,3 +86,36 @@ fn main() {
     assert_eq!(seg.min_left(3, |&x| x <= 1), 2);
 }
 ```
+
+## f64 を segtree にのせる方法
+
+1. 自作構造体 `struct Dat(f64)` を作って、それに `Monoid` を実装する
+2. acl の `Additive` 同様に使いたい場合、`f64` は `Additive` の型 `S` で必要な `Zero` トレイトを 実装していないため、`Additive` 再定義が必要。以下参照。(acl の `Zero` トレイトは private)
+
+```rs
+use std::convert::Infallible;
+use std::marker::PhantomData;
+use std::ops::Add;
+
+trait Zero {
+    fn zero() -> Self;
+}
+impl Zero for f64 {
+    fn zero() -> Self {
+        0.0f64
+    }
+}
+pub struct Additive<S>(Infallible, PhantomData<fn() -> S>);
+impl<S> Monoid for Additive<S>
+where
+    S: Copy + Add<Output = S> + Zero,
+{
+    type S = S;
+    fn identity() -> Self::S {
+        S::zero()
+    }
+    fn binary_operation(a: &Self::S, b: &Self::S) -> Self::S {
+        *a + *b
+    }
+}
+```
