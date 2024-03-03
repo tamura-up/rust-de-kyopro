@@ -27,10 +27,7 @@ where
     /// assert_eq!(st.len(), 3);
     /// ```
     pub fn new() -> Multiset<T> {
-        Multiset {
-            size: 0,
-            map: BTreeMap::new(),
-        }
+        Multiset { size: 0, map: BTreeMap::new() }
     }
 
     /// 要素を追加します
@@ -101,8 +98,13 @@ where
         }
     }
 
+    /// 登録要素数を返します
     pub fn len(&self) -> usize {
         self.size
+    }
+    /// ユニークな要素数を返します
+    pub fn unique_len(&self) -> usize {
+        self.map.len()
     }
 }
 
