@@ -1,4 +1,4 @@
-use std::cmp::{min, max};
+use std::cmp::{max, min};
 
 /// LowLink
 /// 関節点, 橋 の検出 を O(V+E) で行う
@@ -9,12 +9,12 @@ use std::cmp::{min, max};
 /// ```
 /// // https://algo-logic.info/articulation-points/ の冒頭の図の木
 /// let mut ll = kyopro_graph::low_link::LowLink::new(5);
-/// ll.add_edge(0, 1);
-/// ll.add_edge(1, 2);
-/// ll.add_edge(0, 2);
-/// ll.add_edge(0, 3);
-/// ll.add_edge(3, 4);
-/// 
+/// ll.add_edge2(0, 1);
+/// ll.add_edge2(1, 2);
+/// ll.add_edge2(0, 2);
+/// ll.add_edge2(0, 3);
+/// ll.add_edge2(3, 4);
+///
 /// // 探索の実行
 /// ll.run();
 /// // 関節点のリストを取得
@@ -35,13 +35,19 @@ pub struct LowLink {
 impl LowLink {
     pub fn new(n: usize) -> Self {
         let g = vec![vec![]; n];
-        Self { n, g, ord: vec![], low: vec![], aps: vec![], bridges: vec![]}
+        Self { n, g, ord: vec![], low: vec![], aps: vec![], bridges: vec![] }
     }
+
+    /// u -> v の辺を追加します
     pub fn add_edge(&mut self, u: usize, v: usize) {
         assert!(u < self.n);
         assert!(v < self.n);
         self.g[u].push(v);
-        self.g[v].push(u);
+    }
+    /// u -> v, v -> u の 2 辺を追加します
+    pub fn add_edge2(&mut self, u: usize, v: usize) {
+        self.add_edge(u, v);
+        self.add_edge(v, u);
     }
     fn dfs(&mut self, id: usize, mut k: u32, p: usize) -> u32 {
         k += 1;
@@ -100,18 +106,17 @@ impl LowLink {
 #[test]
 fn test_lowlink_multiple_component() {
     let mut ll = LowLink::new(7);
-    ll.add_edge(0, 1);
-    ll.add_edge(1, 2);
+    ll.add_edge2(0, 1);
+    ll.add_edge2(1, 2);
 
-    ll.add_edge(3, 4);
-    ll.add_edge(4, 5);
-    ll.add_edge(5, 6);
-    ll.add_edge(5, 3);
+    ll.add_edge2(3, 4);
+    ll.add_edge2(4, 5);
+    ll.add_edge2(5, 6);
+    ll.add_edge2(5, 3);
 
     ll.run();
     // 関節点
     assert_eq!(ll.aps, vec![1, 5]);
     // 橋
-    assert_eq!(ll.bridges, vec![(0, 1), (1, 2),(5,6)]);
+    assert_eq!(ll.bridges, vec![(0, 1), (1, 2), (5, 6)]);
 }
-
