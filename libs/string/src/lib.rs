@@ -28,6 +28,30 @@ pub mod rolling_hash {
     /// rolling hashの基数
     pub const B: u64 = 1_000_000_000 + 7;
 
+    /// B の階乗を保持しておく
+    static mut BS: [u64; 2_00_000] = [0; 2_00_000];
+    fn bs_init() {
+        unsafe {
+            if BS[0] != 0 {
+                return;
+            }
+            let mut v = 1;
+            for i in 0..BS.len() {
+                BS[i] = v;
+                v = CalcMod(Mul(v, B));
+            }
+        }
+    }
+    fn get_bs(e: usize) -> u64 {
+        unsafe {
+            if e < BS.len() {
+                bs_init();
+                return BS[e];
+            }
+        }
+        CalcPow(B, e)
+    }
+
     /// mod 2^61-1を計算する関数
     pub fn CalcMod(x: u64) -> u64 {
         let xu = x >> 61;
@@ -88,7 +112,7 @@ pub mod rolling_hash {
     ///
     /// 計算量: O(log(current_len))
     pub fn push_front(h: u64, current_len: usize, v: u64) -> u64 {
-        let b = CalcPow(B, current_len);
+        let b = get_bs(current_len);
         CalcMod(h + Mul(v, b))
     }
 
@@ -102,7 +126,7 @@ pub mod rolling_hash {
         }
         let ah = hash(&a);
         let mut bh = hash(&b[0..a.len()]);
-        let fa = CalcPow(B, al);
+        let fa = get_bs(al);
         for i in 0..bl {
             if ah == bh {
                 return true;
