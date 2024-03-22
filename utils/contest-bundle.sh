@@ -26,6 +26,9 @@ do
     -a | --atcoder)
       exclude_atcoder_crates="--exclude-atcoder-202301-crates"
       ;;
+    -l | --leetcode)
+      leetcode=1
+      ;;
     *)
     # ファイル名受取り
       source_file=$(find ./ -name "${1}.rs" | head -n1) ;;
@@ -41,7 +44,14 @@ fi
 # bundle 実行
 cp ${source_file} ${bundle_dir}/src/bin/a.rs
 pushd ${bundle_dir}
-cargo equip $exclude_atcoder_crates --resolve-cfgs --remove docs comments --minify libs  --no-rustfmt --no-check  --bin a | xsel --clipboard --input
+a=$(cargo equip $exclude_atcoder_crates --resolve-cfgs --remove docs comments --minify libs  --no-rustfmt --no-check  --bin a)
+
+if [ -n "$leetcode" ]; then
+    # main 関数を削除などの整形
+    a=$(echo -e "$a" | sed -E '1s/^#!.*//' | sed -E 's/^fn main/fn _main/')
+fi
+
+echo -e "$a" | xsel --clipboard --input
 
 echo ""
 echo '""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""'
