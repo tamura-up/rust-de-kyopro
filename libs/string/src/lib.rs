@@ -52,7 +52,7 @@ pub mod rolling_hash {
         CalcPow(B, e)
     }
 
-    /// mod 2^61-1を計算する関数
+    /// `mod 2^61-1` を計算する関数
     pub fn CalcMod(x: u64) -> u64 {
         let xu = x >> 61;
         let xd = x & MASK61;
@@ -63,7 +63,7 @@ pub mod rolling_hash {
         res
     }
 
-    /// a*b mod 2^61-1を返す関数(最後にModを取らない)
+    /// `a*b` を返す関数(最後にModを取らない)
     pub fn Mul(a: u64, b: u64) -> u64 {
         let au = a >> 31;
         let ad = a & MASK31;
@@ -74,7 +74,12 @@ pub mod rolling_hash {
         let midd = mid & MASK30;
         au * bu * 2 + midu + (midd << 31) + ad * bd
     }
-    /// v^e mod 2^61-1 を計算します
+
+    /// `a*b (mod 2^61-1)` を返す関数
+    pub fn MulMod(a: u64, b: u64) -> u64 {
+        CalcMod(Mul(a, b))
+    }
+    /// `v^e (mod 2^61-1)` を計算します
     pub fn CalcPow(v: u64, e: usize) -> u64 {
         if e == 0 {
             return 1;
@@ -95,7 +100,7 @@ pub mod rolling_hash {
         res
     }
 
-    /// 数列 s のハッシュを取得します
+    /// 数列 `s` のハッシュを取得します
     pub fn hash(s: &[u64]) -> u64 {
         s.iter().fold(0u64, |s, &v| CalcMod(Mul(s, B) + v))
     }
@@ -139,6 +144,11 @@ pub mod rolling_hash {
             bh = CalcMod(CalcMod(Mul(bh, B) + b[i + al]) + d);
         }
         false
+    }
+    /// `lhs - rhs` を計算します
+    pub fn Sub(lhs: u64, rhs: u64) -> u64 {
+        let d = POSITIVIZER - rhs;
+        CalcMod(lhs + d)
     }
 
     #[test]

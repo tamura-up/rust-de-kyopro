@@ -21,6 +21,12 @@ macro_rules! echo { ($($num:expr),*)=> {
     $ (tmp.push(format!("{}",$num));) *
     println!("{}",tmp.join(" ")); };
 }
+#[macro_export]
+macro_rules! ec { ($($num:expr),*)=> {
+    let mut tmp=vec![];
+    $ (tmp.push(format!("{}",$num));) *
+    println!("{}",tmp.join(" ")); };
+}
 
 #[macro_export]
 macro_rules! YesNo {
@@ -147,4 +153,31 @@ mod bound_test {
         assert_eq!(upper_bound(&a, &7), 3);
         assert_eq!(upper_bound(&a, &8), 4);
     }
+}
+
+
+#[allow(unused_macros)]
+#[macro_export]
+/// デバック用の出力
+/// release オプションの場合は出力されません
+macro_rules! db {
+    ($($a:expr),* $(,)*) => {
+        #[cfg(debug_assertions)]
+        eprintln!(concat!($("| ", stringify!($a), "={:?} "),*), $(&$a),*);
+    };
+}
+#[allow(unused_macros)]
+#[macro_export]
+/// 2次元配列のデバック用の出力
+/// release オプションの場合は出力されません
+macro_rules! db2d {
+    ($vec:expr) => {
+        #[cfg(debug_assertions)]
+        {
+            eprintln!("> {}=", stringify!($vec));
+            for a in $vec.iter() {
+                eprintln!("> {:?}", a);
+            }
+        }
+    };
 }
