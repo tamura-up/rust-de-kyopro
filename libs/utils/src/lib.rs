@@ -181,3 +181,16 @@ macro_rules! db2d {
         }
     };
 }
+
+
+#[derive(PartialEq, PartialOrd)]
+/// float ソート用の wrapper
+pub struct OrdF<T>(pub T);
+
+impl<T: PartialEq> Eq for OrdF<T> {}
+
+impl<T: PartialOrd> Ord for OrdF<T> {
+    fn cmp(&self, other: &OrdF<T>) -> std::cmp::Ordering {
+        self.0.partial_cmp(&other.0).unwrap()
+    }
+}
