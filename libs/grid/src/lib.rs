@@ -167,3 +167,35 @@ mod test_mod {
         }
     }
 }
+
+/// グリッドの時計回り回転
+pub fn rot_clock<T>(vec: &Vec<Vec<T>>) -> Vec<Vec<T>>
+where
+    T: Copy + Default,
+{
+    let h = vec.len();
+    let w = vec[0].len();
+    let mut res = vec![vec![T::default(); h]; w];
+    for i in 0..w {
+        for j in 0..h {
+            res[i][j] = vec[h - 1 - j][i];
+        }
+    }
+    res
+}
+
+/// グリッドの半時計回り回転
+pub fn rot_rev_clock<T>(vec: &Vec<Vec<T>>) -> Vec<Vec<T>>
+where
+    T: Copy + Default,
+{
+    let h = vec.len();
+    let w = vec[0].len();
+    let mut res = vec![vec![T::default(); h]; w];
+    for i in 0..w {
+        for j in 0..h {
+            res[i][j] = vec[j][w - i - 1];
+        }
+    }
+    res
+}
