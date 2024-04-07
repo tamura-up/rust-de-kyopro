@@ -1,3 +1,4 @@
+#![allow(non_snake_case)]
 ///! 2次元 segment tree
 /// org: https://nyaannyaan.github.io/library/data-structure-2d/2d-segment-tree.hpp
 
