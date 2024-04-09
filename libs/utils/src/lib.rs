@@ -16,12 +16,6 @@ macro_rules! mat {
 }
 
 #[macro_export]
-macro_rules! echo { ($($num:expr),*)=> {
-    let mut tmp=vec![];
-    $ (tmp.push(format!("{}",$num));) *
-    println!("{}",tmp.join(" ")); };
-}
-#[macro_export]
 macro_rules! ec { ($($num:expr),*)=> {
     let mut tmp=vec![];
     $ (tmp.push(format!("{}",$num));) *
@@ -71,6 +65,31 @@ where
             true
         }
     }
+}
+
+#[macro_export]
+macro_rules! chmax {
+    ($lhs:expr,$rhs:expr) => {
+        if $lhs < $rhs {
+            let tmp = $rhs;
+            $lhs = tmp;
+            true
+        } else {
+            false
+        }
+    };
+}
+#[macro_export]
+macro_rules! chmin {
+    ($lhs:expr,$rhs:expr) => {
+        if $lhs > $rhs {
+            let tmp = $rhs;
+            $lhs = tmp;
+            true
+        } else {
+            false
+        }
+    };
 }
 
 pub fn print_vec<T>(v: &[T])
@@ -155,7 +174,6 @@ mod bound_test {
     }
 }
 
-
 #[allow(unused_macros)]
 #[macro_export]
 /// デバック用の出力
@@ -181,7 +199,6 @@ macro_rules! db2d {
         }
     };
 }
-
 
 #[derive(PartialEq, PartialOrd)]
 /// float ソート用の wrapper
