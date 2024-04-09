@@ -1,5 +1,8 @@
 #![allow(non_snake_case)]
+//! 2次元の matrix を扱うライブラリです。
+
 /// 2次元の行列積 Ax を求めます
+///
 /// # Example
 ///
 /// ```
