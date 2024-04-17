@@ -19,7 +19,7 @@ macro_rules! mat {
 macro_rules! ec { ($($num:expr),*)=> {
     let mut tmp=vec![];
     $ (tmp.push(format!("{}",$num));) *
-    println!("{}",tmp.join(" ")); };
+    print!("{}\n",tmp.join(" ")); };
 }
 
 #[macro_export]

@@ -29,9 +29,6 @@ impl<T: Copy + Ord> RangeFreq<T> {
             // 2つの子をマージ
             dat[i] = Self::merge(&dat[i * 2 + 1], &dat[i * 2 + 2]);
         }
-        // for v in &dat{
-        //     eprintln!("{:?}",v);
-        // }
         Self { n, dat }
     }
     fn merge(l: &[T], r: &[T]) -> Vec<T> {
