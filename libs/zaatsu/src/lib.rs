@@ -18,7 +18,7 @@ where
     T: Ord,
 {
     list: Vec<T>,
-    inited: bool,
+    initialized: bool,
 }
 impl<T> Zaatsu<T>
 where
@@ -27,14 +27,14 @@ where
     pub fn new() -> Self {
         Zaatsu {
             list: vec![],
-            inited: false,
+            initialized: false,
         }
     }
     pub fn add(&mut self, v: T) {
         self.list.push(v);
     }
     pub fn init(&mut self) {
-        self.inited = true;
+        self.initialized = true;
         self.list.sort();
         if self.list.len() == 0 {
             return;
@@ -48,7 +48,7 @@ where
         }
     }
     pub fn index(&self, v: &T) -> usize {
-        assert!(self.inited);
+        assert!(self.initialized);
         let mut l = 0;
         let mut r = self.list.len();
         while l + 1 < r {
@@ -60,6 +60,10 @@ where
             }
         }
         l
+    }
+    pub fn size(&self)->usize{
+        assert!(self.initialized);
+        self.list.len()
     }
 }
 
