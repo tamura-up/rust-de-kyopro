@@ -19,10 +19,7 @@ impl LinearSieve {
                 factor[p * d] = p;
             }
         }
-        LinearSieve {
-            min_prime_factor: factor,
-            prime_list: primes,
-        }
+        LinearSieve { min_prime_factor: factor, prime_list: primes }
     }
     pub fn is_prime(&self, x: usize) -> bool {
         if x < 2 {
@@ -105,4 +102,31 @@ mod linear_sieve_test {
         let res720pairs = sieve.factor_pairs(720);
         assert_ne!(res720pairs, [(2, 3), (3, 2), (5, 1)]);
     }
+}
+
+/// x を素因数分解します。
+/// (素因数, 指数) の vector を返します。
+pub fn prime_factorization(x: usize) -> Vec<(usize, usize)> {
+    let mut lst = vec![];
+    let mut v = x;
+    for i in 2..=x {
+        if v % i == 0 {
+            let mut c = 0;
+            while v % i == 0 {
+                c += 1;
+                v /= i;
+            }
+            lst.push((i, c));
+        }
+        if i > v {
+            break;
+        }
+        if i * i >= x {
+            break;
+        }
+    }
+    if v > 1 {
+        lst.push((v, 1));
+    }
+    lst
 }
