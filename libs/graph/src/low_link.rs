@@ -44,7 +44,7 @@ impl LowLink {
         assert!(v < self.n);
         self.g[u].push(v);
     }
-    /// u -> v, v -> u の 2 辺を追加します
+    /// u - v 間に無向グラフを追加します
     pub fn add_edge2(&mut self, u: usize, v: usize) {
         self.add_edge(u, v);
         self.add_edge(v, u);
