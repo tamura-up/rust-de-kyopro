@@ -39,6 +39,20 @@ impl<T: Copy> Trace<T> {
         out.reverse();
         out
     }
+    pub fn get_last_k(&self, mut i: usize, k: usize)->Vec<T> {
+        let mut out = vec![];
+        let mut iter = 0;
+        while i != !0 {
+            iter += 1;
+            out.push(self.log[i].0);
+            i = self.log[i].1;
+            if iter == k {
+                break;
+            }
+        }
+        out.reverse();
+        out
+    }
 }
 
 #[cfg(test)]
