@@ -200,7 +200,7 @@ macro_rules! db2d {
     };
 }
 
-#[derive(PartialEq, PartialOrd)]
+#[derive(PartialEq, PartialOrd, Clone, Copy)]
 /// float ソート用の wrapper
 pub struct OrdF<T>(pub T);
 
