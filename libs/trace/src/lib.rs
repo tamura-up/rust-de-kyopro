@@ -39,6 +39,15 @@ impl<T: Copy> Trace<T> {
         out.reverse();
         out
     }
+    pub fn get_tid_list(&self, mut i: usize) -> Vec<usize> {
+        let mut out = vec![];
+        while i != !0 {
+            out.push(i);
+            i = self.log[i].1;
+        }
+        out.reverse();
+        out
+    }
     pub fn get_last_k(&self, mut i: usize, k: usize)->Vec<T> {
         let mut out = vec![];
         let mut iter = 0;

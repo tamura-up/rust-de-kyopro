@@ -9,11 +9,11 @@ use std::cmp::Reverse;
 
 /// Interval Heap (両端優先度付きキュー)です。
 #[derive(Clone, Debug)]
-pub struct IntervalHeap<T: Ord + Eq> {
+pub struct IntervalHeap<T: PartialOrd> {
     data: Vec<T>,
 }
 
-impl<T: Ord + Eq> IntervalHeap<T> {
+impl<T: PartialOrd> IntervalHeap<T> {
     pub fn new() -> IntervalHeap<T> {
         IntervalHeap { data: Vec::new() }
     }
@@ -209,12 +209,12 @@ fn test_interval_heap_pop_max() {
 
 /// 容量制限付きの最大値優先キューです。
 #[derive(Clone, Debug)]
-pub struct LimitedMaximumHeap<T: Ord + Eq> {
+pub struct LimitedMaximumHeap<T: PartialOrd> {
     heap: IntervalHeap<T>,
     limit: usize,
 }
 
-impl<T: Ord + Eq> LimitedMaximumHeap<T> {
+impl<T: PartialOrd> LimitedMaximumHeap<T> {
     /// コンストラクタ
     /// + limit: 最大容量
     pub fn new(limit: usize) -> LimitedMaximumHeap<T> {
@@ -265,11 +265,11 @@ impl<T: Ord + Eq> LimitedMaximumHeap<T> {
 
 /// 容量制限付きの最小値優先キューです。
 #[derive(Clone, Debug)]
-pub struct LimitedMinimumHeap<T: Ord + Eq> {
+pub struct LimitedMinimumHeap<T: PartialOrd> {
     heap: LimitedMaximumHeap<Reverse<T>>,
 }
 
-impl<T: Ord + Eq> LimitedMinimumHeap<T> {
+impl<T: PartialOrd> LimitedMinimumHeap<T> {
     pub fn new(limit: usize) -> LimitedMinimumHeap<T> {
         LimitedMinimumHeap { heap: LimitedMaximumHeap::new(limit) }
     }

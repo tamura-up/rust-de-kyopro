@@ -4,7 +4,7 @@ use std::ops::{Index, IndexMut};
 pub const D4: [P; 4] = [P(1, 0), P(0, 1), P(!0, 0), P(0, !0)];
 
 /// 座標を表す構造体
-#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Debug, Hash)]
 pub struct P(pub usize, pub usize);
 
 impl P {
