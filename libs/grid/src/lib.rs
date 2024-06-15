@@ -1,7 +1,41 @@
-use std::ops::{Index, IndexMut};
+use std::{
+    fmt,
+    ops::{Index, IndexMut},
+};
 
 /// down, right, up, left
 pub const D4: [P; 4] = [P(1, 0), P(0, 1), P(!0, 0), P(0, !0)];
+
+#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+pub enum Direction {
+    D,
+    R,
+    U,
+    L,
+}
+impl From<usize> for Direction {
+    fn from(d: usize) -> Self {
+        match d {
+            0 => Direction::D,
+            1 => Direction::R,
+            2 => Direction::U,
+            3 => Direction::L,
+            _ => unreachable!(),
+        }
+    }
+}
+
+impl fmt::Display for Direction {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        let c = match self {
+            Direction::D => 'D',
+            Direction::R => 'R',
+            Direction::U => 'U',
+            Direction::L => 'L',
+        };
+        write!(f, "{}", c)
+    }
+}
 
 /// 座標を表す構造体
 #[derive(Clone, Copy, PartialEq, Eq, Debug, Hash)]
@@ -36,17 +70,22 @@ impl<T> IndexMut<P> for Vec<Vec<T>> {
     }
 }
 
+#[derive(Clone)]
 pub struct Grid<T> {
     h: usize,
     w: usize,
-    g: Vec<Vec<T>>,
+    pub g: Vec<Vec<T>>,
 }
 impl<T> Grid<T>
 where
     T: Copy,
 {
     pub fn from(g: &Vec<Vec<T>>) -> Self {
-        Grid { h: g.len(), w: g[0].len(), g: g.clone() }
+        Grid {
+            h: g.len(),
+            w: g[0].len(),
+            g: g.clone(),
+        }
     }
     /// # Arguments
     ///
@@ -71,12 +110,16 @@ impl<T> Grid<T> {
     ///  }
     ///  ```
     pub fn adj4<'a>(&'a self, p: P) -> impl Iterator<Item = P> + 'a {
-        D4.iter().map(move |&d| p.add(&P(d.0, d.1))).filter(|&p| p.0 < self.h && p.1 < self.w)
+        D4.iter()
+            .map(move |&d| p.add(&P(d.0, d.1)))
+            .filter(|&p| p.0 < self.h && p.1 < self.w)
     }
 
     /// b から 各 offset 分移動した座標 の Iterator<P> を返します
     pub fn positions_from<'a>(&'a self, b: P, offsets: &'a [P]) -> impl Iterator<Item = P> + 'a {
-        let x = offsets.iter().map(move |&d| P(b.0.wrapping_add(d.0), b.1.wrapping_add(d.1)));
+        let x = offsets
+            .iter()
+            .map(move |&d| P(b.0.wrapping_add(d.0), b.1.wrapping_add(d.1)));
         x.filter(|&p| p.0 < self.h && p.1 < self.w)
     }
 
