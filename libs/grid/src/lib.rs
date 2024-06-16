@@ -36,6 +36,7 @@ impl<T> IndexMut<P> for Vec<Vec<T>> {
     }
 }
 
+#[derive(Debug, Clone)]
 pub struct Grid<T> {
     h: usize,
     w: usize,
@@ -43,10 +44,10 @@ pub struct Grid<T> {
 }
 impl<T> Grid<T>
 where
-    T: Copy,
+    T: Clone,
 {
-    pub fn from(g: &Vec<Vec<T>>) -> Self {
-        Grid { h: g.len(), w: g[0].len(), g: g.clone() }
+    pub fn from_vec(g: Vec<Vec<T>>) -> Self {
+        Grid { h: g.len(), w: g[0].len(),  g }
     }
     /// # Arguments
     ///

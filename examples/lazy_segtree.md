@@ -56,6 +56,7 @@ fn main() {
 ```
 
 使える問題
+
 + https://atcoder.jp/contests/abc327/tasks/abc327_f
 
 ## 区間加算・区間合計
@@ -122,78 +123,83 @@ impl MapMonoid for LazyData {
 
 ## Monoid, MapMonoid を自作 Struct に
 
-https://atcoder.jp/contests/abc322/tasks/abc322_f の例
-
 ```rs
-use ac_library::{LazySegtree, MapMonoid, Max, Monoid};
+use ac_library::{LazySegtree, MapMonoid, Monoid};
 
 #[derive(Debug, Clone)]
 struct Data {
-    fr: [i32; 2],
-    bk: [i32; 2],
-    sz: i32,
-    mx: [i32; 2],
+    x: usize,
+}
+impl Data {
+    fn new(v: usize) -> Data {
+        Data { x: v }
+    }
 }
 impl Monoid for Data {
     type S = Data;
 
     fn identity() -> Self::S {
-        Data {
-            fr: [0; 2],
-            bk: [0; 2],
-            sz: 0,
-            mx: [0; 2],
-        }
+        Data { x: 0 }
     }
     fn binary_operation(a: &Self::S, b: &Self::S) -> Self::S {
-        if a.sz == 0 {
-            return b.clone();
-        }
-        if b.sz == 0 {
-            return a.clone();
-        }
-        // ...なんか処理
-        Data {
-            fr,
-            bk,
-            mx,
-            sz: a.sz + b.sz,
-        }
+        Data { x: a.x + b.x }
     }
 }
 
 struct LazySegData;
 impl MapMonoid for LazySegData {
     type M = Data;
-    type F = i32;
+    type F = Option<i32>;
 
     // 恒等写像 id
     // mapping(id, x) = x となる値
     fn identity_map() -> Self::F {
-        -1
+        None
     }
 
     // F
     // 遅延していた区間の更新をノードに適用するイメージ
-    fn mapping(&f: &Self::F, x: &Self::M) -> Self::M {
-        if f != 1 {
-            return x.clone();
+    fn mapping(&f: &Self::F, data: &Self::M) -> Self::M {
+        if f.is_none() {
+            return data.clone();
         }
-        let mut res = x.clone();
-        // なんか処理
-        res
+        let f = f.unwrap();
+        if f == 1 {
+            Data { x: data.x ^ 1 }
+        } else {
+            data.clone()
+        }
     }
 
     // F 同士の演算(写像の合成?) f∘g
     fn composition(&f: &Self::F, &g: &Self::F) -> Self::F {
         // f or g が id の場合は skip
-        if f == Self::identity_map() {
-            return g;
+        if f.is_none() {
+            return g.clone();
         }
-        if g == Self::identity_map() {
-            return f;
+        if g.is_none() {
+            return f.clone();
         }
-        f ^ g
+        let f = f.unwrap();
+        let g = g.unwrap();
+        Some(f ^ g)
+    }
+}
+
+fn main() {
+    input! { N:usize,Q:usize, }
+
+    let mut seg: LazySegtree<LazySegData> = LazySegtree::new(N + 5);
+    // 初期値の設定
+    for i in 0..N {
+        seg.set(i, Data::new(1));
+    }
+    for _qi in 0..Q {
+        // クエリ処理
     }
 }
 ```
+
+### その他サンプル
+
++ https://atcoder.jp/contests/abc357/submissions/54385839

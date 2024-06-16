@@ -1,10 +1,10 @@
 ///! 履歴管理データ構造
 ///! src: https://atcoder.jp/contests/ahc021/submissions/42958368
-pub struct Trace<T: Copy> {
+pub struct Trace<T: Clone> {
     log: Vec<(T, usize)>,
 }
 
-impl<T: Copy> Trace<T> {
+impl<T: Clone> Trace<T> {
     /// # Examples
     /// ```
     /// use kyoupuro_trace::Trace;
@@ -33,7 +33,7 @@ impl<T: Copy> Trace<T> {
     pub fn get(&self, mut i: usize) -> Vec<T> {
         let mut out = vec![];
         while i != !0 {
-            out.push(self.log[i].0);
+            out.push(self.log[i].0.clone());
             i = self.log[i].1;
         }
         out.reverse();
@@ -53,7 +53,7 @@ impl<T: Copy> Trace<T> {
         let mut iter = 0;
         while i != !0 {
             iter += 1;
-            out.push(self.log[i].0);
+            out.push(self.log[i].0.clone());
             i = self.log[i].1;
             if iter == k {
                 break;
