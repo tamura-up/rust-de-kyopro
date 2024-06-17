@@ -1,6 +1,6 @@
 use std::{
     fmt,
-    ops::{Index, IndexMut},
+    ops::{self, Index, IndexMut},
 };
 
 /// down, right, up, left
@@ -12,6 +12,16 @@ pub enum Direction {
     R,
     U,
     L,
+}
+impl Direction {
+    pub fn rev(&self) -> Self {
+        match self {
+            Direction::D => Direction::U,
+            Direction::U => Direction::D,
+            Direction::R => Direction::L,
+            Direction::L => Direction::R,
+        }
+    }
 }
 impl From<usize> for Direction {
     fn from(d: usize) -> Self {
@@ -54,6 +64,17 @@ impl P {
         let a = (self.0 as i32 - rhp.0 as i32).abs() as usize;
         let b = (self.1 as i32 - rhp.1 as i32).abs() as usize;
         a + b
+    }
+}
+impl ops::Add<Direction> for P {
+    type Output = Self;
+    fn add(self, rhs: Direction) -> Self {
+        match rhs {
+            Direction::D => self.add(&D4[0]),
+            Direction::R => self.add(&D4[1]),
+            Direction::U => self.add(&D4[2]),
+            Direction::L => self.add(&D4[3]),
+        }
     }
 }
 
