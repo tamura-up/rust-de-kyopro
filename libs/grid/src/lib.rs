@@ -48,7 +48,7 @@ impl fmt::Display for Direction {
 }
 
 /// 座標を表す構造体
-#[derive(Clone, Copy, PartialEq, Eq, Debug, Hash)]
+#[derive(Clone, Copy, PartialEq, Eq, Debug, Hash, PartialOrd, Ord)]
 pub struct P(pub usize, pub usize);
 
 impl P {
@@ -102,7 +102,11 @@ where
     T: Clone,
 {
     pub fn from_vec(g: Vec<Vec<T>>) -> Self {
-        Grid { h: g.len(), w: g[0].len(),  g }
+        Grid {
+            h: g.len(),
+            w: g[0].len(),
+            g,
+        }
     }
     /// # Arguments
     ///
